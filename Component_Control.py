@@ -3,8 +3,8 @@ from lib import Combobox
 import tkinter as tk
 
 class Component_Control(tk.Frame):
-    def __init__(self, master, text):
-        super().__init__(master)
+    def __init__(self, master, text, **kwargs):
+        super().__init__(master,**kwargs)
         self.master = master
         self.rowconfigure(0,weight=1)
         self.columnconfigure(0,weight=1)

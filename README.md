@@ -1,5 +1,5 @@
 # Image Viewer
-This is a desktop GUI for viewing images and mixing images.
+This is a desktop GUI for viewing and mixing images.
 
 # Setup
 

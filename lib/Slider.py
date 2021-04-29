@@ -5,5 +5,8 @@ class Slider(tk.Scale):
         super().__init__(master,**kwargs)
         self.master = master
 
-    def on_change(self,callback):
-        self.bind("<ButtonRelease>",lambda e: callback(self.get()))
+    def on_change(self,callback,lazy=False):
+        if lazy:
+            self.bind("<ButtonRelease>",lambda e: callback(self.get()))
+        else:
+            self["command"] = callback

@@ -1,6 +1,8 @@
-from lib import Graph,MenuBar,Image
-from Mixer import Mixer
 import tkinter as tk
+from Output_Panel import Output_Panel
+from Input_Panel import Input_Panel
+from lib import MenuBar
+from Mixer import Mixer
 
 class Application(tk.Frame):
     def __init__(self,master,title):
@@ -22,42 +24,29 @@ class Application(tk.Frame):
         self.columnconfigure(0,weight=1)
         self.columnconfigure(1,weight=1)
         
-        self.create_input_panel().grid(row=0,column=0,sticky="nsew",padx=4,pady=4)
-        self.create_mixer_panel().grid(row=0,column=1,sticky="nsew",padx=4,pady=4)
-        self.create_input_panel().grid(row=1,column=0,sticky="nsew",padx=4,pady=4)
-        self.create_output_panel().grid(row=1,column=1,sticky="nsew",padx=4,pady=4)
+        input1 = self.create_input_panel("snake2.jpeg")
+        input1.grid(row=0,column=0,sticky="nsew",padx=4,pady=4)
+        
+        input2 = self.create_input_panel("snake1.jpeg")
+        input2.grid(row=1,column=0,sticky="nsew",padx=4,pady=4)
+        
+        output = self.create_output_panel()
+        output.grid(row=1,column=1,sticky="nsew",padx=4,pady=4)
+        
+        mixer = self.create_mixer_panel(input1,input2,output)
+        mixer.grid(row=0,column=1,sticky="nsew",padx=4,pady=4)
     
-    def create_input_panel(self):
-        container=tk.Frame(self)
-        container.rowconfigure(0,weight=1)
-        container.columnconfigure(0,weight=1)
-        container.columnconfigure(1,weight=1)
+    def create_input_panel(self,image):
+        panel=Input_Panel(self,image)
+        return panel
 
-        image = Image(container)
-        image.set_image("demo.jpg")
-        graph = Graph(container)
-        graph.plot(x=[1,2,3],y=[1,2,3])    
-        image.grid(row=0,column=0,sticky="nsew",padx=4,pady=4)
-        graph.grid(row=0,column=1,sticky="nsew",padx=4,pady=4)
-        return container
-
-    def create_mixer_panel(self):
-        mixer = Mixer(self)
+    def create_mixer_panel(self,input1,input2,output):
+        mixer = Mixer(self,input1.image,input2.image,output.image1,output.image2)
         return mixer
     
     def create_output_panel(self):
-        container=tk.Frame(self)
-        container.rowconfigure(0,weight=1)
-        container.columnconfigure(0,weight=1)
-        container.columnconfigure(1,weight=1)
-
-        image1_output = Image(container)
-        image2_output = Image(container)
-        image1_output.set_image("demo.jpg")
-        image2_output.set_image("demo.jpg")
-        image1_output.grid(row=0,column=0,sticky="nsew",padx=4,pady=4)
-        image2_output.grid(row=0,column=1,sticky="nsew",padx=4,pady=4)
-        return container
+        panel=Output_Panel(self)
+        return panel
 
 if __name__ == "__main__":
     root = tk.Tk()

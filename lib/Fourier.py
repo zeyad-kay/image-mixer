@@ -59,4 +59,4 @@ class Fourier():
     
     @staticmethod
     def uniphase(data):
-        return Fourier.magnitude(data) * np.exp(0)
+        return Fourier.magnitude(data)

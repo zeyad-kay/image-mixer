@@ -1,7 +1,8 @@
+from lib.Graph import Graph
 from lib.Fourier import Fourier
 import tkinter as tk
 from PIL import Image as PILImage
-from PIL import ImageTk
+from PIL import ImageTk,ImageOps
 import numpy as np
 
 class Image(tk.Frame):
@@ -11,16 +12,13 @@ class Image(tk.Frame):
         self._image = None
         self._image_data = None
         self._fourier = None
-    
+        self._gray_scale = None
         self.rowconfigure(0,weight=1)
         self.columnconfigure(0,weight=1)
+        self.canvas = Graph(self)
 
     def show(self):           
-        self.canvas = tk.Canvas(self, bd=0, highlightthickness=0)
-        resize = self._image.resize((400,400))
-        self.render = ImageTk.PhotoImage(resize)
-
-        self.canvas.create_image(0, 0, image=self.render, anchor="nw", tags="IMG")
+        self.canvas.image(self.get_data(),'gray')
         self.canvas.grid(row=0,column=0,sticky="wens")
 
     def open_image(self,image):
@@ -39,3 +37,8 @@ class Image(tk.Frame):
         if self._fourier is None:
             self._fourier = Fourier.fast2d(self.get_data())
         return self._fourier
+    
+    def get_gray(self):
+        if self._gray_scale is None:
+            self._gray_scale = ImageOps.grayscale(self._image)
+        return self._gray_scale

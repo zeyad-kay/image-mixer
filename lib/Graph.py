@@ -29,3 +29,16 @@ class Graph(tk.Frame):
         finally:
             self._figure.canvas.draw_idle()
             self._figure.canvas.flush_events()
+    
+    def image(self,data,cmap):
+        ax = self._figure.axes[0]
+        ax.clear()
+        try:
+            ax.imshow(data,cmap)
+            ax.get_xaxis().set_visible(False)
+            ax.get_yaxis().set_visible(False)
+        except Exception as e:
+            print(e)
+        finally:
+            self._figure.canvas.draw_idle()
+            self._figure.canvas.flush_events()

@@ -1,7 +1,7 @@
 import numpy as np
 from lib import Fourier
 import tkinter as tk
-from lib import Combobox, Graph,Image
+from lib import Combobox, Image
 
 class Input_Panel(tk.Frame):
     def __init__(self,master,image,**kwargs):
@@ -18,16 +18,13 @@ class Input_Panel(tk.Frame):
             "Real":Fourier.real,
             "Imaginary":Fourier.imaginary
         }
-        # box_container = tk.Frame(self,bg="red")
-        # box_container.rowconfigure(0,weight=1)
-        # box_container.columnconfigure(0,weight=1)
 
         self.cbox = Combobox(self,values=["Magnitude","Phase","Real","Imaginary"])
+        self.cbox.set(self.cbox["values"][0])
         self.cbox.grid(row=0,column=0,sticky="ns",padx=4,pady=4)
         self.cbox.on_change(self.update_image)
-        # box_container.grid(row=0,column=0,sticky="nsew",padx=4,pady=4)
 
-        imgs_container = tk.Frame(self)
+        imgs_container = tk.Frame(self,bg="white")
         imgs_container.rowconfigure(0,weight=1)
         imgs_container.columnconfigure(0,weight=1)
         imgs_container.columnconfigure(1,weight=1)
@@ -37,9 +34,8 @@ class Input_Panel(tk.Frame):
         self.image.open_image(image)
         self.image.show()
 
-        self.complex_data = self.image.get_fourier()
-        self.freq = Fourier.frequency(len(self.complex_data))
-
+        self.gray_fourier = Fourier.fast2d(self.image.get_gray())
+        
         self.image2 = Image(imgs_container)
         self.image2.size = self.image.size
         self.update_image(self.cbox.get())
@@ -49,8 +45,22 @@ class Input_Panel(tk.Frame):
         imgs_container.grid(row=1,column=0,sticky="nsew",padx=4,pady=4)
 
     def update_image(self,label):
-        result = self.options.get(label)(self.complex_data)
-        data = Fourier.real(Fourier.inverse(result))
-        data = np.round(data).astype(np.uint32)
-        self.image2.set_image(data,self.image2.size,rgb=False)
+        # shift the fourier transform to the center
+        # Without shifting the edges will illuminate instead
+        # of the center
+        if label == "Phase" or label == "Magnitude":
+            shifted_fourier = np.fft.fftshift(self.gray_fourier)
+            result = self.options.get(label)(shifted_fourier)
+        else:
+            result = self.options.get(label)(self.gray_fourier)
+        
+        if label == "Real":
+            print(result)
+            # result = result + min(result)
+            result = 20*np.log(result)
+        
+        if label == "Magnitude":
+            result = 20*np.log(result)
+            
+        self.image2.set_image(result)
         self.image2.show()

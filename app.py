@@ -1,9 +1,12 @@
 import tkinter as tk
+import logging
 from Output_Panel import Output_Panel
 from Input_Panel import Input_Panel
 from lib import MenuBar,Messagebox
 from Mixer import Mixer
 
+# TODO
+# real component image
 class Application(tk.Frame):
     def __init__(self,master,title):
         super().__init__(master,bg="white")
@@ -17,7 +20,9 @@ class Application(tk.Frame):
         self.master.config(menu=MenuBar(self))
         self.files = []
         self.bind("<<Fileupload>>",lambda e: self.create_widgets())
-    
+        logging.basicConfig(filename='app.log',level=logging.INFO, filemode='w', format='%(asctime)s - %(levelname)s - %(message)s')
+        logging.info("Application started successfully")
+
     def create_widgets(self):
 
         self.rowconfigure(0,weight=1)
@@ -39,10 +44,11 @@ class Application(tk.Frame):
             output.grid(row=1,column=1,sticky="nsew",padx=4,pady=4)
             mixer.grid(row=0,column=1,sticky="nsew",padx=4,pady=4)
         else:
-            Messagebox.error("Example","Images are not the same size!")
+            Messagebox.error(message="Images are not the same size!")
+            logging.error("Different Image size")
 
     def create_input_panel(self,image):
-        panel=Input_Panel(self,image)
+        panel=Input_Panel(self,image,bg="white")
         return panel
 
     def create_mixer_panel(self,input1,input2,output):
@@ -50,7 +56,7 @@ class Application(tk.Frame):
         return mixer
     
     def create_output_panel(self):
-        panel = Output_Panel(self)
+        panel = Output_Panel(self,bg="white")
         return panel
 
 if __name__ == "__main__":

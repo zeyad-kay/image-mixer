@@ -6,8 +6,16 @@ class Fourier():
         return np.fft.fft(data)
     
     @staticmethod
+    def fast2d(data):
+        return np.fft.fft2(data)
+    
+    @staticmethod
     def inverse(data):
         return np.fft.ifft(data)
+    
+    @staticmethod
+    def inverse2d(data):
+        return np.fft.ifft2(data)
     
     @staticmethod
     def frequency(n):

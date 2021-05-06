@@ -1,7 +1,7 @@
 import tkinter as tk
 from Output_Panel import Output_Panel
 from Input_Panel import Input_Panel
-from lib import MenuBar
+from lib import MenuBar,Messagebox
 from Mixer import Mixer
 
 class Application(tk.Frame):
@@ -14,28 +14,33 @@ class Application(tk.Frame):
         self.master.grid_rowconfigure(0, weight=1)
         self.grid(sticky="nsew")
         
-        self.create_widgets()
+        self.master.config(menu=MenuBar(self))
+        self.files = []
+        self.bind("<<Fileupload>>",lambda e: self.create_widgets())
     
     def create_widgets(self):
-        self.master.config(menu=MenuBar(self))
 
         self.rowconfigure(0,weight=1)
         self.rowconfigure(1,weight=1)
         self.columnconfigure(0,weight=1)
         self.columnconfigure(1,weight=1)
         
-        input1 = self.create_input_panel("snake2.jpeg")
-        input1.grid(row=0,column=0,sticky="nsew",padx=4,pady=4)
+        input1 = self.create_input_panel(self.files[0])
         
-        input2 = self.create_input_panel("snake1.jpeg")
-        input2.grid(row=1,column=0,sticky="nsew",padx=4,pady=4)
+        input2 = self.create_input_panel(self.files[1])
         
         output = self.create_output_panel()
-        output.grid(row=1,column=1,sticky="nsew",padx=4,pady=4)
         
         mixer = self.create_mixer_panel(input1,input2,output)
-        mixer.grid(row=0,column=1,sticky="nsew",padx=4,pady=4)
-    
+        
+        if input1.image.size == input2.image.size:
+            input1.grid(row=0,column=0,sticky="nsew",padx=4,pady=4)
+            input2.grid(row=1,column=0,sticky="nsew",padx=4,pady=4)
+            output.grid(row=1,column=1,sticky="nsew",padx=4,pady=4)
+            mixer.grid(row=0,column=1,sticky="nsew",padx=4,pady=4)
+        else:
+            Messagebox.error("Example","Images are not the same size!")
+
     def create_input_panel(self,image):
         panel=Input_Panel(self,image)
         return panel
@@ -45,7 +50,7 @@ class Application(tk.Frame):
         return mixer
     
     def create_output_panel(self):
-        panel=Output_Panel(self)
+        panel = Output_Panel(self)
         return panel
 
 if __name__ == "__main__":

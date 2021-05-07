@@ -1,7 +1,12 @@
-from lib import Graph,MenuBar,Image
-from Mixer import Mixer
 import tkinter as tk
+import logging
+from Output_Panel import Output_Panel
+from Input_Panel import Input_Panel
+from lib import MenuBar,Messagebox
+from Mixer import Mixer
 
+# TODO
+# real component image
 class Application(tk.Frame):
     def __init__(self,master,title):
         super().__init__(master,bg="white")
@@ -12,52 +17,47 @@ class Application(tk.Frame):
         self.master.grid_rowconfigure(0, weight=1)
         self.grid(sticky="nsew")
         
-        self.create_widgets()
-    
-    def create_widgets(self):
         self.master.config(menu=MenuBar(self))
+        self.files = []
+        self.bind("<<Fileupload>>",lambda e: self.create_widgets())
+        logging.basicConfig(filename='app.log',level=logging.INFO, filemode='w', format='%(asctime)s - %(levelname)s - %(message)s')
+        logging.info("Application started successfully")
+
+    def create_widgets(self):
 
         self.rowconfigure(0,weight=1)
         self.rowconfigure(1,weight=1)
         self.columnconfigure(0,weight=1)
         self.columnconfigure(1,weight=1)
         
-        self.create_input_panel().grid(row=0,column=0,sticky="nsew",padx=4,pady=4)
-        self.create_mixer_panel().grid(row=0,column=1,sticky="nsew",padx=4,pady=4)
-        self.create_input_panel().grid(row=1,column=0,sticky="nsew",padx=4,pady=4)
-        self.create_output_panel().grid(row=1,column=1,sticky="nsew",padx=4,pady=4)
-    
-    def create_input_panel(self):
-        container=tk.Frame(self)
-        container.rowconfigure(0,weight=1)
-        container.columnconfigure(0,weight=1)
-        container.columnconfigure(1,weight=1)
+        input1 = self.create_input_panel(self.files[0])
+        
+        input2 = self.create_input_panel(self.files[1])
+        
+        output = self.create_output_panel()
+        
+        mixer = self.create_mixer_panel(input1,input2,output)
+        
+        if input1.image.size == input2.image.size:
+            input1.grid(row=0,column=0,sticky="nsew",padx=4,pady=4)
+            input2.grid(row=1,column=0,sticky="nsew",padx=4,pady=4)
+            output.grid(row=1,column=1,sticky="nsew",padx=4,pady=4)
+            mixer.grid(row=0,column=1,sticky="nsew",padx=4,pady=4)
+        else:
+            Messagebox.error(message="Images are not the same size!")
+            logging.error("Different Image size")
 
-        image = Image(container)
-        image.set_image("demo.jpg")
-        graph = Graph(container)
-        graph.plot(x=[1,2,3],y=[1,2,3])    
-        image.grid(row=0,column=0,sticky="nsew",padx=4,pady=4)
-        graph.grid(row=0,column=1,sticky="nsew",padx=4,pady=4)
-        return container
+    def create_input_panel(self,image):
+        panel=Input_Panel(self,image,bg="white")
+        return panel
 
-    def create_mixer_panel(self):
-        mixer = Mixer(self)
+    def create_mixer_panel(self,input1,input2,output):
+        mixer = Mixer(self,input1.image,input2.image,output.image1,output.image2)
         return mixer
     
     def create_output_panel(self):
-        container=tk.Frame(self)
-        container.rowconfigure(0,weight=1)
-        container.columnconfigure(0,weight=1)
-        container.columnconfigure(1,weight=1)
-
-        image1_output = Image(container)
-        image2_output = Image(container)
-        image1_output.set_image("demo.jpg")
-        image2_output.set_image("demo.jpg")
-        image1_output.grid(row=0,column=0,sticky="nsew",padx=4,pady=4)
-        image2_output.grid(row=0,column=1,sticky="nsew",padx=4,pady=4)
-        return container
+        panel = Output_Panel(self,bg="white")
+        return panel
 
 if __name__ == "__main__":
     root = tk.Tk()

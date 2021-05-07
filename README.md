@@ -1,5 +1,5 @@
 # Image Viewer
-This is a desktop GUI for viewing and mixing images.
+This is a desktop GUI for displaying and mixing different components of 2 images.
 
 # Setup
 
@@ -18,3 +18,5 @@ This is a desktop GUI for viewing and mixing images.
 ```
 > python app.py
 ```
+
+The *images* folder contains some image files for testing. 

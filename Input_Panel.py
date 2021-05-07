@@ -55,9 +55,8 @@ class Input_Panel(tk.Frame):
             result = self.options.get(label)(self.gray_fourier)
         
         if label == "Real":
+            result =  np.nan_to_num(20*np.log(result)) + 20*np.log(np.abs(np.min(result)))
             print(result)
-            # result = result + min(result)
-            result = 20*np.log(result)
         
         if label == "Magnitude":
             result = 20*np.log(result)

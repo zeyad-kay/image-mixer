@@ -1,4 +1,7 @@
 .venv
 __pycache__
 .vscode
-app.log
+*.log
+build
+dist
+*.spec

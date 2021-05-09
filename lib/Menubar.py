@@ -15,6 +15,7 @@ class MenuBar(tk.Menu):
 
     def file_upload(self):
         files = 0
+        self.master.files = []
         while files != 2:
             filename = filedialog.askopenfilename(initialdir="/",
                                                   title="Select a File",

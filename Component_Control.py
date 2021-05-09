@@ -77,23 +77,25 @@ class Component_Control(tk.Frame):
                 other_component = component
         
         factor = self.factor_slider.get() / 100
-        other_component_factor = other_component.factor_slider.get() / 100
-      
         fourier = self.imgs[self.image_cbox.get()].get_fourier()
-        other_component_fourier = other_component.imgs[other_component.image_cbox.get()].get_fourier()
-
+        other_image_fourier = [img.get_fourier() for img in self.imgs.values() if img is not self.imgs[self.image_cbox.get()]][0]
         comp1_mode = self.mode[self.component_cbox.get()]
-        comp2_mode = other_component.mode[other_component.component_cbox.get()]
-      
-        mix1 = comp1_mode(fourier) * factor + comp1_mode(other_component_fourier) * (1-factor)
-        mix2 = comp2_mode(other_component_fourier) * other_component_factor + comp2_mode(fourier) * (1-other_component_factor)
+        mix1 = comp1_mode(fourier) * factor + comp1_mode(other_image_fourier) * (1-factor)
 
+        other_component_factor = other_component.factor_slider.get() / 100
+        fourier = other_component.imgs[other_component.image_cbox.get()].get_fourier()
+        other_image_fourier = [img.get_fourier() for img in self.imgs.values() if img is not self.imgs[other_component.image_cbox.get()]][0]
+        comp2_mode = other_component.mode[other_component.component_cbox.get()]
+        mix2 = comp2_mode(fourier) * other_component_factor + comp2_mode(other_image_fourier) * (1-other_component_factor)
+        
         if self.component_cbox.get() == "UniPhase":
             mix1 = 0
         if self.component_cbox.get() == "UniMagnitude":
             mix1 = 1
-        if self.component_cbox.get() == "Real" or self.component_cbox.get() == "Imaginary":
-            output = mix1 + mix2
+        if self.component_cbox.get() == "Real":
+            output = mix1 + mix2*1j
+        elif self.component_cbox.get() == "Imaginary":
+            output = mix1*1j + mix2
         elif self.component_cbox.get() == "Phase" or self.component_cbox.get() == "UniPhase":
             output = mix2 * np.exp(mix1*1j)
         else:

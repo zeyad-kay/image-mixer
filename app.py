@@ -5,8 +5,6 @@ from Input_Panel import Input_Panel
 from lib import MenuBar,Messagebox
 from Mixer import Mixer
 
-# TODO
-# real component image
 class Application(tk.Frame):
     def __init__(self,master,title):
         super().__init__(master,bg="white")
@@ -34,18 +32,22 @@ class Application(tk.Frame):
         
         input2 = self.create_input_panel(self.files[1])
         
-        output = self.create_output_panel()
-        
-        mixer = self.create_mixer_panel(input1,input2,output)
         
         if input1.image.size == input2.image.size:
+            output = self.create_output_panel()
+            mixer = self.create_mixer_panel(input1,input2,output)
+            
             input1.grid(row=0,column=0,sticky="nsew",padx=4,pady=4)
             input2.grid(row=1,column=0,sticky="nsew",padx=4,pady=4)
             output.grid(row=1,column=1,sticky="nsew",padx=4,pady=4)
             mixer.grid(row=0,column=1,sticky="nsew",padx=4,pady=4)
+            logging.info("Images Uploaded successfully")
         else:
             Messagebox.error(message="Images are not the same size!")
-            logging.error("Different Image size")
+            self.files = []
+            input1.destroy()
+            input2.destroy()
+            logging.error("Different Images size")
 
     def create_input_panel(self,image):
         panel=Input_Panel(self,image,bg="white")

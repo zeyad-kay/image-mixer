@@ -29,6 +29,7 @@ class Image(tk.Frame):
     def set_image(self,data):
         self._image = PILImage.fromarray(data)
         self._image_data = data
+        self._fourier = None
 
     def get_data(self):
         return self._image_data

@@ -1,4 +1,4 @@
-# Image Viewer
+# Image Mixer
 This is a desktop GUI for displaying and mixing different components of 2 images.
 
 # Setup

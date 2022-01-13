@@ -19,4 +19,4 @@ This is a desktop GUI for displaying and mixing different components of 2 images
 > python src\main.py
 ```
 
-The *images* folder contains some image files for testing. 
+The *samples* folder contains some image files for testing. 

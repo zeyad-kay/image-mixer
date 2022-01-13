@@ -1,8 +1,8 @@
-from lib.Graph import Graph
-from lib.Fourier import Fourier
+from .Graph import Graph
+from core import Fourier
 import tkinter as tk
 from PIL import Image as PILImage
-from PIL import ImageTk,ImageOps
+from PIL import ImageOps
 import numpy as np
 
 class Image(tk.Frame):

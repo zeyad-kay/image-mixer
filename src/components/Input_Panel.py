@@ -1,7 +1,8 @@
 import numpy as np
-from lib import Fourier
+from core import Fourier
 import tkinter as tk
-from lib import Combobox, Image
+from .Combobox import Combobox
+from .Image import Image
 
 class Input_Panel(tk.Frame):
     def __init__(self,master,image,**kwargs):

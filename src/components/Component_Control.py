@@ -1,6 +1,8 @@
 import numpy as np
 import threading
-from lib import Slider, Combobox, Fourier
+from .Slider import Slider
+from .Combobox import Combobox
+from core import Fourier
 import tkinter as tk
 
 class Component_Control(tk.Frame):

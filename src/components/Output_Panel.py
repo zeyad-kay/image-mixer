@@ -1,5 +1,5 @@
 import tkinter as tk
-from lib import Image
+from .Image import Image
 
 class Output_Panel(tk.Frame):
     def __init__(self,master,**kwargs):

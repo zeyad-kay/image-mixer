@@ -1,5 +1,5 @@
-from lib import Combobox
-from Component_Control import Component_Control
+from .Combobox import Combobox
+from .Component_Control import Component_Control
 import tkinter as tk
 
 class Mixer(tk.Frame):

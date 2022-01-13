@@ -1,9 +1,6 @@
 import tkinter as tk
 import logging
-from Output_Panel import Output_Panel
-from Input_Panel import Input_Panel
-from lib import MenuBar,Messagebox
-from Mixer import Mixer
+from components import Output_Panel, Input_Panel, MenuBar, Messagebox, Mixer
 
 class Application(tk.Frame):
     def __init__(self,master,title):

@@ -16,7 +16,7 @@ This is a desktop GUI for displaying and mixing different components of 2 images
 
 3. Run the app.
 ```
-> python app.py
+> python src\main.py
 ```
 
 The *images* folder contains some image files for testing. 
